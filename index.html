@@ -149,6 +149,55 @@
         </table>
       `;
     }
-  </script>
+  <script>
+  function genCaptcha(){
+    const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let s=''; 
+    for(let i=0;i<5;i++) s+=chars[Math.floor(Math.random()*chars.length)];
+    document.getElementById('captcha').innerText=s;
+  }
+  genCaptcha();
+
+  function login(){
+    const app = document.getElementById('app').value.trim();
+    const pass = document.getElementById('pass').value.trim();
+    const capIn = document.getElementById('captchaInput').value;
+    const cap = document.getElementById('captcha').innerText;
+
+    if(capIn !== cap){
+      alert('CAPTCHA incorrect');
+      genCaptcha();
+      return;
+    }
+
+    // DEMO database
+    const db = {
+      "1234567890": {
+        password:"demo123",
+        pdf:"result_1234567890.pdf"
+      }
+    };
+
+    if(!db[app] || db[app].password !== pass){
+      alert('Invalid Application Number or Password');
+      return;
+    }
+
+    // ✅ OPEN PDF
+    const pdfPath = db[app].pdf;
+
+    // new tab me open
+    window.open(pdfPath, "_blank");
+
+    // optional: auto download
+    const a = document.createElement("a");
+    a.href = pdfPath;
+    a.download = pdfPath;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+</script>
+
 </body>
 </html>
