@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Result Login (Demo)</title>
+
   <style>
     :root{
       --blue:#0b3c6f;
@@ -14,17 +15,12 @@
     *{box-sizing:border-box;font-family:Arial, Helvetica, sans-serif}
     body{margin:0;background:#f5f7fb;color:#333}
 
-    /* Header */
     .topbar{
       background:linear-gradient(180deg,var(--blue),var(--dark));
-      color:#fff;
-      padding:10px 14px;
-      text-align:center;
-      font-size:14px;
+      color:#fff;padding:10px 14px;text-align:center;font-size:14px;
     }
-    .topbar .title{font-weight:700;letter-spacing:.3px}
+    .topbar .title{font-weight:700}
 
-    /* Card */
     .wrap{display:flex;justify-content:center;padding:28px}
     .card{
       width:100%;max-width:520px;background:#fff;border-radius:4px;
@@ -32,171 +28,123 @@
     }
     .card-head{
       background:linear-gradient(180deg,#123d6b,#0b2f57);
-      color:#fff;padding:10px 14px;font-weight:700;display:flex;align-items:center;gap:8px
+      color:#fff;padding:10px 14px;font-weight:700;
     }
-    .lock{font-size:16px}
     .card-body{padding:18px}
 
-    .row{display:grid;grid-template-columns:180px 1fr;gap:10px;align-items:center;margin-bottom:12px}
-    label{font-size:13px;color:#444}
+    .row{display:grid;grid-template-columns:180px 1fr;gap:10px;margin-bottom:12px}
+    label{font-size:13px}
     input{
-      height:36px;border:1px solid var(--border);border-radius:3px;padding:0 10px;font-size:14px
+      height:36px;border:1px solid var(--border);
+      border-radius:3px;padding:0 10px;
     }
-    input:focus{outline:none;border-color:#7aa7ff}
 
-    .captcha-row{display:grid;grid-template-columns:180px 1fr;gap:10px;align-items:center;margin:12px 0}
-    .captcha-box{display:flex;align-items:center;gap:10px}
     .captcha{
-      background:#0c3c6f;color:#fff;font-weight:700;letter-spacing:2px;
-      padding:8px 14px;border-radius:3px;user-select:none
+      background:#0c3c6f;color:#fff;font-weight:700;
+      padding:8px 14px;border-radius:3px;
+      letter-spacing:2px;
     }
-    .refresh{cursor:pointer;color:#1e8e3e;font-size:18px}
 
-    .actions{display:flex;justify-content:center;margin-top:10px}
     .btn{
-      background:var(--green);color:#fff;border:none;border-radius:3px;
-      padding:10px 22px;font-weight:700;cursor:pointer
+      background:var(--green);color:#fff;border:none;
+      padding:10px 22px;font-weight:700;
+      cursor:pointer;border-radius:3px;
     }
-    .btn:active{transform:translateY(1px)}
 
     .footer{
-      margin-top:26px;background:#0b3c6f;color:#dfe9ff;
-      text-align:center;padding:10px;font-size:12px
+      background:#0b3c6f;color:#dfe9ff;
+      text-align:center;padding:10px;font-size:12px;
+      margin-top:20px;
     }
 
-    @media (max-width:520px){
-      .row,.captcha-row{grid-template-columns:1fr}
-      label{margin-bottom:-6px}
+    @media(max-width:520px){
+      .row{grid-template-columns:1fr}
     }
   </style>
 </head>
-<body>
-  <div class="topbar">
-    <div class="title">JOINT ENTRANCE EXAMINATION (Main) – 2026</div>
-    <div>SESSION 1 (JANUARY 2026) • NTA SCORE CARD: Paper 1 (B.E./B.Tech.)</div>
-  </div>
 
-  <div class="wrap">
-    <div class="card">
-      <div class="card-head"><span class="lock">🔒</span> View Result</div>
-      <div class="card-body">
-        <div class="row">
-          <label>Application Number :</label>
-          <input id="app" placeholder="Enter Application Number" />
-        </div>
-        <div class="row">
-          <label>Password :</label>
-          <input id="pass" type="password" placeholder="Enter Password" />
-        </div>
-        <div class="row">
-          <label>Enter CAPTCHA <span style="color:#1e8e3e">(case sensitive)</span> :</label>
-          <input id="captchaInput" placeholder="Type CAPTCHA" />
-        </div>
-        <div class="captcha-row">
-          <label>CAPTCHA :</label>
-          <div class="captcha-box">
-            <div id="captcha" class="captcha">ABCDE</div>
-            <div class="refresh" title="Refresh" onclick="genCaptcha()">🔄</div>
-          </div>
-        </div>
-        <div class="actions">
-          <button class="btn" onclick="login()">LOGIN</button>
-        </div>
+<body>
+
+<div class="topbar">
+  <div class="title">JOINT ENTRANCE EXAMINATION (Main) – 2026</div>
+  SESSION 1 (JANUARY 2026) • NTA SCORE CARD
+</div>
+
+<div class="wrap">
+  <div class="card">
+    <div class="card-head">🔒 View Result</div>
+
+    <div class="card-body">
+      <div class="row">
+        <label>Application Number :</label>
+        <input id="app">
+      </div>
+
+      <div class="row">
+        <label>Password :</label>
+        <input id="pass" type="password">
+      </div>
+
+      <div class="row">
+        <label>Enter CAPTCHA :</label>
+        <input id="captchaInput">
+      </div>
+
+      <div class="row">
+        <label>CAPTCHA :</label>
+        <div class="captcha" id="captcha"></div>
+      </div>
+
+      <div style="text-align:center">
+        <button class="btn" onclick="login()">LOGIN</button>
       </div>
     </div>
   </div>
+</div>
 
-  <div class="footer">
-    This site is designed and hosted by NIC PEP Division. The contents are provided by NTA.
-  </div>
+<div class="footer">
+  This site is designed and hosted by NIC PEP Division. Contents by NTA.
+</div>
 
-  <script>
-    function genCaptcha(){
-      const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-      let s=''; for(let i=0;i<5;i++) s+=chars[Math.floor(Math.random()*chars.length)];
-      document.getElementById('captcha').innerText=s;
-    }
+<script>
+function genCaptcha(){
+  const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let c="";
+  for(let i=0;i<5;i++){
+    c+=chars[Math.floor(Math.random()*chars.length)];
+  }
+  document.getElementById("captcha").innerText=c;
+}
+genCaptcha();
+
+function login(){
+  const app=document.getElementById("app").value.trim();
+  const pass=document.getElementById("pass").value.trim();
+  const capIn=document.getElementById("captchaInput").value.trim();
+  const cap=document.getElementById("captcha").innerText;
+
+  if(capIn!==cap){
+    alert("CAPTCHA incorrect");
     genCaptcha();
-
-    function login(){
-      const app = document.getElementById('app').value.trim();
-      const pass = document.getElementById('pass').value.trim();
-      const capIn = document.getElementById('captchaInput').value;
-      const cap = document.getElementById('captcha').innerText;
-      if(capIn !== cap){ alert('CAPTCHA incorrect'); genCaptcha(); return; }
-
-      // DEMO database (fake)
-      const db = {
-        "1234567890": { password:"demo123", name:"Tushar Nayare", percentile:98.76, phy:96, chem:99, maths:97 }
-      };
-
-      if(!db[app] || db[app].password !== pass){
-        alert('Invalid Application Number or Password (Demo)');
-        return;
-      }
-
-      // Show result
-      const r = db[app];
-      document.querySelector('.card-body').innerHTML = `
-        <h3 style="margin-top:0">Result (Demo)</h3>
-        <p><b>Name:</b> ${r.name}</p>
-        <p><b>Application No:</b> ${app}</p>
-        <hr/>
-        <p><b>Overall Percentile:</b> ${r.percentile}</p>
-        <table style="width:100%;border-collapse:collapse">
-          <tr><th style="border:1px solid #ddd;padding:6px">Physics</th><th style="border:1px solid #ddd;padding:6px">Chemistry</th><th style="border:1px solid #ddd;padding:6px">Maths</th></tr>
-          <tr><td style="border:1px solid #ddd;padding:6px;text-align:center">${r.phy}</td><td style="border:1px solid #ddd;padding:6px;text-align:center">${r.chem}</td><td style="border:1px solid #ddd;padding:6px;text-align:center">${r.maths}</td></tr>
-        </table>
-      `;
-    }
-  <script>
-  function genCaptcha(){
-    const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    let s=''; 
-    for(let i=0;i<5;i++) s+=chars[Math.floor(Math.random()*chars.length)];
-    document.getElementById('captcha').innerText=s;
+    return;
   }
-  genCaptcha();
 
-  function login(){
-    const app = document.getElementById('app').value.trim();
-    const pass = document.getElementById('pass').value.trim();
-    const capIn = document.getElementById('captchaInput').value;
-    const cap = document.getElementById('captcha').innerText;
-
-    if(capIn !== cap){
-      alert('CAPTCHA incorrect');
-      genCaptcha();
-      return;
+  // 🔐 DEMO DATABASE
+  const db={
+    "1234567890":{
+      password:"demo123",
+      pdf:"1234567890.pdf"
     }
+  };
 
-    // DEMO database
-    const db = {
-      "1234567890": {
-        password:"demo123",
-        pdf:"result_1234567890.pdf"
-      }
-    };
-
-    if(!db[app] || db[app].password !== pass){
-      alert('Invalid Application Number or Password');
-      return;
-    }
-
-    // ✅ OPEN PDF
-    const pdfPath = db[app].pdf;
-
-    // new tab me open
-    window.open(pdfPath, "_blank");
-
-    // optional: auto download
-    const a = document.createElement("a");
-    a.href = pdfPath;
-    a.download = pdfPath;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+  if(!db[app] || db[app].password!==pass){
+    alert("Invalid Application Number or Password");
+    return;
   }
+
+  // ✅ JEE MAIN STYLE PDF OPEN
+  window.open(db[app].pdf,"_blank");
+}
 </script>
 
 </body>
