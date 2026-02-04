@@ -2,170 +2,127 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JEE (Main) 2026 : NTA Score Card</title>
+<title>Result Login</title>
 
 <style>
-:root{--blue:#0b3c6f;--dark:#08325c;--green:#2e8b57;--border:#d9d9d9}
-*{box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
-body{margin:0;background:#f5f7fb;color:#333}
-
-.topbar{
-  background:linear-gradient(180deg,var(--blue),var(--dark));
-  color:#fff;text-align:center;padding:10px;font-size:14px
+body{
+  font-family: Arial, sans-serif;
+  background:#f2f2f2;
 }
-.topbar .title{font-weight:700}
-
-.wrap{display:flex;justify-content:center;padding:24px}
-.card{
-  width:100%;max-width:560px;background:#fff;border-radius:4px;
-  box-shadow:0 6px 18px rgba(0,0,0,.08);overflow:hidden
+.box{
+  width:330px;
+  margin:100px auto;
+  background:#fff;
+  padding:20px;
+  border-radius:8px;
+  box-shadow:0 0 10px rgba(0,0,0,0.2);
 }
-.card-head{
-  background:linear-gradient(180deg,#123d6b,#0b2f57);
-  color:#fff;padding:10px 14px;font-weight:700
+input,button{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  font-size:15px;
 }
-.card-body{padding:16px}
-
-.row{display:grid;grid-template-columns:180px 1fr;gap:10px;margin-bottom:12px}
-label{font-size:13px}
-input{
-  height:38px;border:1px solid var(--border);
-  border-radius:3px;padding:0 10px;font-size:14px
+button{
+  background:#007bff;
+  color:white;
+  border:none;
+  cursor:pointer;
 }
-
-.captcha{
-  background:#0c3c6f;color:#fff;font-weight:700;
-  padding:8px 14px;border-radius:3px;letter-spacing:2px;user-select:none
+#captcha{
+  font-weight:bold;
+  letter-spacing:3px;
+  background:#eee;
+  padding:8px;
+  text-align:center;
+  margin-top:10px;
 }
-
-.btn{
-  background:var(--green);color:#fff;border:none;
-  padding:10px 18px;font-weight:700;cursor:pointer;border-radius:3px
+.pass-box{
+  position:relative;
 }
-
-.error{
-  display:none;background:#ffe6e6;color:#b00000;
-  border:1px solid #ffb3b3;padding:8px;font-size:13px;margin-bottom:12px
-}
-
-.footer{
-  background:#0b3c6f;color:#dfe9ff;
-  text-align:center;padding:10px;font-size:12px;margin-top:20px
-}
-
-@media(max-width:520px){
-  .row{grid-template-columns:1fr}
+.eye{
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  font-size:16px;
+  user-select:none;
 }
 </style>
 </head>
 
 <body>
 
-<div class="topbar">
-  <div class="title">JOINT ENTRANCE EXAMINATION (Main) – 2026</div>
-  SESSION 1 (JANUARY 2026) • NTA SCORE CARD
-</div>
+<div class="box">
+  <h3>Result Login</h3>
 
-<div class="wrap">
-  <div class="card">
-    <div class="card-head">🔒 View Result</div>
+  <input id="app" type="text" inputmode="numeric" placeholder="Application Number">
 
-    <div class="card-body" id="loginBox">
-
-      <div class="error" id="errorBox"></div>
-
-      <div class="row">
-        <label>Application Number :</label>
-        <input id="app" inputmode="numeric" placeholder="Enter Application Number">
-      </div>
-
-      <div class="row">
-        <label>Password :</label>
-        <input id="pass" type="password" placeholder="Enter Password">
-      </div>
-
-      <div class="row">
-        <label>Enter CAPTCHA :</label>
-        <input id="captchaInput" placeholder="Type CAPTCHA">
-      </div>
-
-      <div class="row">
-        <label>CAPTCHA :</label>
-        <div class="captcha" id="captcha"></div>
-      </div>
-
-      <div style="text-align:center">
-        <button class="btn" onclick="login()">LOGIN</button>
-      </div>
-
-    </div>
+  <div class="pass-box">
+    <input id="pass" type="password" placeholder="Password">
+    <span class="eye" onclick="togglePass()">👁️</span>
   </div>
-</div>
 
-<div class="footer">
-  This page is for personal reference purpose only.
+  <div id="captcha"></div>
+  <input id="captchaInput" type="text" placeholder="Enter Captcha">
+
+  <button onclick="login()">Login</button>
 </div>
 
 <script>
+/* ===== DATABASE ===== */
+const db = {
+  "260310087055": {
+    password: "@Tushar638",
+    pdf: "260310087055.pdf"
+  }
+};
+
+/* ===== CAPTCHA ===== */
 function genCaptcha(){
-  const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  let c="";
-  for(let i=0;i<5;i++) c+=chars[Math.floor(Math.random()*chars.length)];
-  document.getElementById("captcha").innerText=c;
+  const c = Math.floor(1000 + Math.random() * 9000);
+  document.getElementById("captcha").innerText = c;
 }
 genCaptcha();
 
-function showError(msg){
-  const e=document.getElementById("errorBox");
-  e.innerText=msg;
-  e.style.display="block";
+/* ===== PASSWORD EYE TOGGLE ===== */
+function togglePass(){
+  const p = document.getElementById("pass");
+  p.type = (p.type === "password") ? "text" : "password";
 }
 
+/* ===== LOGIN FUNCTION (FULLY FIXED) ===== */
 function login(){
 
-  const app = document.getElementById("app").value.replace(/\s+/g,"");
+  const app = String(
+    document.getElementById("app").value
+  ).replace(/\s+/g,"");
+
   const pass = document.getElementById("pass").value.trim();
   const capIn = document.getElementById("captchaInput").value.trim();
   const cap = document.getElementById("captcha").innerText;
 
-  document.getElementById("errorBox").style.display="none";
-
-  // EMPTY CHECK
-  if(!app || !pass || !capIn){
-    showError("All fields are mandatory.");
+  if(app === "" || pass === ""){
+    alert("Please fill all fields");
     return;
   }
 
-  // CAPTCHA CHECK
   if(capIn !== cap){
-    showError("Security PIN (CAPTCHA) is incorrect.");
+    alert("Captcha incorrect");
     genCaptcha();
     return;
   }
 
-  // DEMO DATABASE (FINAL)
-  const db = {
-    "260310087055": {
-      password: "@Tushar638",
-      pdf: "260310087055.pdf"
-    }
-  };
-
-  // LOGIN CHECK
-  if(!db[app] || db[app].password !== pass){
-    showError("Invalid Application Number or Password.");
+  if(!db.hasOwnProperty(app) || db[app].password !== pass){
+    alert("INVALID APPLICATION OR PASSWORD");
     return;
   }
 
-  // SUCCESS → SHOW PDF
-  document.getElementById("loginBox").innerHTML = `
-    <h3 style="margin:0 0 10px">Score Card</h3>
-    <iframe src="${db[app].pdf}"
-      style="width:100%;height:650px;border:1px solid #ccc"></iframe>
-  `;
+  window.open(db[app].pdf,"_blank");
 }
 </script>
 
 </body>
 </html>
+
